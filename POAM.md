@@ -11,23 +11,24 @@
 
 ## Purpose and Background
 
-Cletho is a standalone, AI-powered decision partner designed to help individuals think more clearly and systematically through complex or uncertain decisions. Drawing on principles from decision theory, structured reasoning, and modular logic, Cletho supports users in mapping options, clarifying values, anticipating consequences, and comparing strategies.
+Cletho is a standalone, AI-powered decision partner designed to help individuals think more clearly, critically, and systematically through complex or uncertain decisions. Drawing on principles from decision theory, behavioral economics, Socratic dialog, and Rogerian engagement, Cletho interacts with users as a questioner, not an answerer, to help them examine the decision environment more systematically and their own thinking more reflectively.
 
-The MVP aims to deliver a conversational prototype that demonstrates the value of AI-assisted decision structuring—without making decisions for the user. Instead, Cletho serves as a logic-based guide to help users navigate trade-offs and uncertainties in real-world contexts.
+Cletho aims to deliver a conversational prototype that demonstrates the value of AI-assisted decision structuring—without making decisions for the user. Instead, Cletho serves as a logic-based guide to help users navigate trade-offs and uncertainties in real-world contexts.
 
 ---
 
 ## Objectives
 
 - Build a functional MVP that can:
-  - Guide users through at least one full decision matrix
+  - Guide users through the development of full decision matrix
   - Apply multiple decision strategies (e.g., expected utility, maximin)
-  - Incorporate at least three task-specific knowledge (TK) modules
+  - Address the 12 most common cognitive biases 
   - Log user interactions, rationale, and selected strategies
 
 - Deliver a technical foundation that:
   - Demonstrates modular reasoning workflows
-  - Allows future expansion via new TK modules
+  - Allows future expansion into advanced decision making methodologies
+  - Allows future addition of more cognitive biases  
   - Operates as a self-contained application
 
 - Conduct internal evaluation and testing to inform future iterations
@@ -38,7 +39,7 @@ The MVP aims to deliver a conversational prototype that demonstrates the value o
 
 **In Scope:**
 - Core Cletho GPT instance (decision matrix engine)
-- Initial set of TK modules (Pascal’s Wager, safety tradeoff, career decision)
+- Initial set of cognitive biases  
 - Conversational prompt architecture and task orchestration
 - Simple user interface (chat or chat+visual)
 - Logging and transparency framework
