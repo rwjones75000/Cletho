@@ -4,7 +4,7 @@ This checklist covers the three core technical skill areas needed to build Cleth
 
 ---
 
-## 🧩 Skill Track 1: Python Application Development
+## Skill Track 1: Python Application Development
 
 - [ ] Write modular Python functions for input → output transforms
 - [ ] Define and use Python classes (e.g., `DecisionMatrix`, `DialogueState`)
@@ -19,7 +19,7 @@ This checklist covers the three core technical skill areas needed to build Cleth
 
 ---
 
-## 🧠 Skill Track 2: LLM API Integration & Prompt Control
+## Skill Track 2: LLM API Integration & Prompt Control
 
 - [ ] Make a basic call to OpenAI's `chat.completions.create` endpoint
 - [ ] Use system and user roles effectively in prompt structure
@@ -49,7 +49,7 @@ This checklist covers the three core technical skill areas needed to build Cleth
 
 ---
 
-## 🧪 Optional Integration Milestones
+## Optional Integration Milestones
 
 - [ ] Integrate the RAG system with Cletho’s Dialogue Manager for Step 2 support
 - [ ] Test prompt-only vs RAG-augmented response patterns
