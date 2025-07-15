@@ -49,6 +49,23 @@ This checklist covers the three core technical skill areas needed to build Cleth
 
 ---
 
+## Skill Track 4: Persistent Memory and State Management
+
+This track focuses on the techniques Cletho will need to retain, retrieve, and revise session-specific information across multiple user interactions — without overstepping into personalization. The emphasis is on structured, inspectable memory that supports reasoning, transparency, and control.
+
+- [ ] Understand and compare short-term memory (STM), long-term memory (LTM), and context window usage in LLMs  
+- [ ] Represent memory explicitly using Python data structures (e.g., dictionaries, class instances, lists)  
+- [ ] Build a `SessionMemory` class to track and update dialogue history, questions asked, and decisions in progress  
+- [ ] Implement memory serialization (JSON, YAML, or pickle) to allow save/load of state  
+- [ ] Log state transitions with timestamps and reasoning snapshots  
+- [ ] Index memory entries for fast retrieval by topic, step, or user intent  
+- [ ] Test replay of memory to resume interrupted sessions or review reasoning history  
+- [ ] Enforce memory boundaries to prevent contamination (e.g., “session-only” vs “global” memory)  
+- [ ] Integrate memory snapshots into prompts as structured input blocks  
+- [ ] Simulate a complete session with multi-turn state tracking and regeneration
+
+---  
+
 ## Optional Integration Milestones
 
 - [ ] Integrate the RAG system with Cletho’s Dialogue Manager for Step 2 support
