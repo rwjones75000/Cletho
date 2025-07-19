@@ -1,15 +1,15 @@
 # 🧠 RAG Prompt Augmentation Cheat Sheet
 
 ---
-title: "RAG Prompt Augmentation Cheat Sheet"
-author: "Rick Jones"
-date: "2025-07-18"
-version: "1.0"
-tags: ["RAG", "prompt-engineering", "Python", "LLM", "Cletho"]
-summary: "Step-by-step guide for augmenting prompts with structured data in a RAG workflow, using Python functions and chat-friendly message formatting."
-status: "draft"
-project: "Cletho"
-track: "Track 3 - RAG and Knowledge Retrieval"
+title: "RAG Prompt Augmentation Cheat Sheet"    
+author: "Rick Jones"    
+date: "2025-07-18"    
+version: "1.0"    
+tags: ["RAG", "prompt-engineering", "Python", "LLM", "Cletho"]    
+summary: "Step-by-step guide for augmenting prompts with structured data in a RAG workflow, using Python functions and chat-friendly message formatting."    
+status: "draft"    
+project: "Cletho"   
+track: "Track 3 - RAG and Knowledge Retrieval"    
 
 ---
 
