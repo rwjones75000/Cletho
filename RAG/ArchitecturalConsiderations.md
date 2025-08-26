@@ -1,15 +1,16 @@
-# Architectural Note to Future Self: Cletho’s Minimum Viable RAG System
+# Architectural Considerations: Cletho’s Minimum Viable RAG System
 
-This document captures the principal architectural features of the RAG system for Cletho, as they stood at the end of August 2025. It is written so that if all prior transcripts are lost, a future reader (human or AI) will still understand the reasoning and design intent.
+This document captures the principal architectural features of the RAG system for Cletho, as they stood at the end of August 2025. It is written so that if all prior documentation is lost, a future reader (human or AI) will still understand the reasoning and design intent.
 
 ---
 
 ## Purpose
 
-Cletho is a deliberative assistant designed to help users make complex decisions through a structured, multi-step dialogue.  
-To support this, Cletho requires a **minimum viable retrieval-augmented generation (RAG) system**.  
+Cletho is a decision assistant designed to help users make complex decisions through a structured, multi-step dialogue. That dialog consists primarily of Cletho asking the user questions in order to (1) build out a decision matrix, and (2) identify any cognitive biases that may be affecting the user’s reasoning.
 
-Unlike most RAG systems, which are designed to answer **user-prompted questions**, Cletho’s variant must also support **system-initiated prompts** that emerge from scripted steps in a decision-making framework.
+To support this, Cletho requires a ** retrieval-augmented generation (RAG) system**.   
+
+Unlike most RAG systems, which are designed to answer **user-prompted questions**, Cletho’s variant must primarily support **system-initiated prompts** that emerge from scripted steps in a decision-making and cognitive bias identifying framework.
 
 ---
 
@@ -17,17 +18,18 @@ Unlike most RAG systems, which are designed to answer **user-prompted questions*
 
 Cletho’s RAG is **dual-triggered**:
 
-1. **User-originated input**  
-   Retrieval may be initiated by any form of user input, not just explicit questions. Examples:  
-   - A direct **question**: *“What’s expected utility?”*  
-   - An **answer** to Cletho’s question: *“I think anchoring is affecting me here.”*  
-   - A **statement or reflection**: *“This payoff seems hard to compare.”*
-
-2. **Script-originated events**  
-   Retrieval may also be triggered from Cletho’s internal scripts, for example:  
+1. **Script-originated events**  
+   Retrieval will be triggered from Cletho’s internal scripts, for example:  
    - When a step calls for a **definition or explanation**  
    - When a worked **example** or template is useful  
    - When Cletho needs to surface **heuristics or bias checks**
+
+
+2. **User-originated input**  
+   Retrieval may also be initiated by any form of user input, not just explicit questions. Examples:  
+   - A direct **question**: *“What’s expected utility?”*  
+   - An **answer** to Cletho’s question: *“I think anchoring is affecting me here.”*  
+   - A **statement or reflection**: *“This payoff seems hard to compare.”*
 
 This design means the retrieval system is not simply reactive — it is woven into the procedural flow of Cletho’s dialogue.
 
@@ -148,4 +150,4 @@ If you are the “future me” reading this:
 The essence of Cletho’s RAG is not just answering questions, but **supporting the process** of building, interpreting, and reflecting on decision matrices. The retrieval system exists to bring in the right knowledge at the right time — sometimes because the user asks for it, and sometimes because Cletho knows the script calls for it.  
 
 Keep that duality in mind as you design, and remember: modularity and separation of concerns (user data vs knowledge base, short-term vs long-term memory, retrieval vs reasoning) are what will keep this system robust as it grows.
-
+<img width="468" height="639" alt="image" src="https://github.com/user-attachments/assets/e2e8318a-f6bb-4ec0-a9f0-cbd1bf03e21e" />
