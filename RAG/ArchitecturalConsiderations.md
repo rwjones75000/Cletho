@@ -135,15 +135,6 @@ For the seven-week build, **minimum viable RAG** means:
 
 ---
 
-## Open Questions (for next design pass)
-
-- **Corpus structure:** Will it be flat text files, database-native entries, or a hybrid?  
-- **Classifier:** Should it start as rules-based or use a zero-shot LLM?  
-- **Evaluation:** How will retrieval effectiveness be measured (precision@k, step completion success)?  
-- **Session recall:** Should prior session summaries be injected wholesale, or selectively chunked?  
-
----
-
 ## Closing Note
 
 The essence of Cletho’s RAG is not just answering questions, but **supporting the process** of building, interpreting, and reflecting on decision matrices. The retrieval system exists to bring in the right knowledge at the right time — sometimes because the user asks for it, and sometimes because Cletho knows the script calls for it.  
