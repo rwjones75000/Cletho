@@ -143,8 +143,9 @@ Keep that duality in mind as you design, and remember: modularity and separation
 
 ---  
 
+## Mermaid Diagram  
+
 flowchart TD
-  %% Containers
   subgraph DC[Decision Cycle (dc_id)]
     direction TB
 
@@ -165,92 +166,57 @@ flowchart TD
       SessB[Session B\n(login→logout)]
     end
 
-    %% Script hooks inside steps
-    S3 -->|script turn: prompt| Hook3{{RAG Hook?\nrag_trigger:true\nrag_purpose: definition/example}}
-    S6 -->|script turn: needs example| Hook6{{RAG Hook?}}
-    S8 -->|script turn: bias check| Hook8{{RAG Hook?}}
+    S3 -->|script turn| Hook3{{RAG Hook}}
+    S6 -->|script turn| Hook6{{RAG Hook}}
+    S8 -->|script turn| Hook8{{RAG Hook}}
 
-    %% Sessions cross steps
     SessA -. spans .-> S3
     SessA -. spans .-> S4
     SessB -. spans .-> S6
     SessB -. spans .-> S10
   end
 
-  %% Front-end I/O
-  U[User Turn\nquestion/answer/statement] --> Classifier
-  Script[Script Turn\n(step prompt/assist)] --> Classifier
+  U[User Turn] --> Classifier
+  Script[Script Turn] --> Classifier
 
-  %% Classifier & Query Builder
-  Classifier[Lightweight Classifier\nlabels: user_question | user_answer | user_statement | script\n+ step context] --> QB
-  QB[Query Builder\ncurrent turn + step metadata + distilled session/DC summaries] --> Retriever
+  Classifier --> QB[Query Builder]
+  QB --> Retriever
 
-  %% Hybrid Retrieval
   subgraph RAG[Hybrid Retrieval]
     direction TB
-    Retriever[Retriever]
-    KW[keyword]
-    SEM[semantic]
-    META[metadata filter]
-    Retriever --> KW
-    Retriever --> SEM
-    Retriever --> META
+    Retriever --> KW[keyword]
+    Retriever --> SEM[semantic]
+    Retriever --> META[metadata filter]
     KW --> Hits[(ranked hits)]
     SEM --> Hits
     META --> Hits
   end
 
-  %% KB & Data Domains
   subgraph KB[Internal Knowledge Base]
-    direction TB
     KBDocs[kb_documents]
-    KBChunks[kb_chunks\n+ embeddings + tags]
+    KBChunks[kb_chunks]
   end
 
-  subgraph DATA[User/Data Domain (Supabase/Postgres)]
-    direction TB
-    Decisions[decisions (DC)]
+  subgraph DATA[User Data (Supabase)]
+    Decisions[decisions]
     DCSteps[dc_steps]
     SessionsTbl[sessions]
-    SessSum[session_summaries\n(narrative + embedding)]
+    SessSum[session_summaries]
     Matrix[matrix_artifacts]
     Logs[retrieval_logs]
   end
 
-  Hits --> LLM[LLM Wrapper\n(cite-aware generation)]
-  LLM --> Out[Response / Next Script Action]
+  Hits --> LLM[LLM Wrapper]
+  LLM --> Out[Response / Next Action]
 
-  %% Storage flows
-  U -->|raw turn| SessionsTbl
-  Script -->|script events| DCSteps
-  Out -->|artifacts/updates| Matrix
-  Out -->|summaries| SessSum
+  U --> SessionsTbl
+  Script --> DCSteps
+  Out --> Matrix
+  Out --> SessSum
 
-  %% Retriever sources
   Retriever --> KBChunks
   KBChunks --> KBDocs
 
-  %% Context sources to QB
   SessSum --> QB
   DCSteps --> QB
   Decisions --> QB
-
-  %% Separation guard
-  classDef sep fill:#ffe9e9,stroke:#ff6b6b,stroke-width:1px,color:#333
-  class KB sep
-  class DATA sep
-
-  %% Notes
-  note right of Classifier
-    Trigger Policy:
-    - user-originated input OR
-      script-originated hook
-    - simple heuristics to avoid over-fetch
-  end
-
-  note right of RAG
-    Multi-mode retrieval:
-    keyword + semantic + metadata
-  end
-
-
