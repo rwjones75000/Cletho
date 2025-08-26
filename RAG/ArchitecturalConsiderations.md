@@ -141,3 +141,116 @@ The essence of Cletho’s RAG is not just answering questions, but **supporting 
 
 Keep that duality in mind as you design, and remember: modularity and separation of concerns (user data vs knowledge base, short-term vs long-term memory, retrieval vs reasoning) are what will keep this system robust as it grows.
 
+---  
+
+flowchart TD
+  %% Containers
+  subgraph DC[Decision Cycle (dc_id)]
+    direction TB
+
+    subgraph Steps[Decision Cycle Steps]
+      direction LR
+      S1[dc01: Introduction]
+      S3[dc03: Framing]
+      S4[dc04: Courses of Action]
+      S6[dc06: Payoffs]
+      S7[dc07: Probabilities]
+      S8[dc08: Utilities / Heuristics]
+      S10[dc10: Interpret Results]
+    end
+
+    subgraph Sessions[Temporal Sessions]
+      direction TB
+      SessA[Session A\n(login→logout)]
+      SessB[Session B\n(login→logout)]
+    end
+
+    %% Script hooks inside steps
+    S3 -->|script turn: prompt| Hook3{{RAG Hook?\nrag_trigger:true\nrag_purpose: definition/example}}
+    S6 -->|script turn: needs example| Hook6{{RAG Hook?}}
+    S8 -->|script turn: bias check| Hook8{{RAG Hook?}}
+
+    %% Sessions cross steps
+    SessA -. spans .-> S3
+    SessA -. spans .-> S4
+    SessB -. spans .-> S6
+    SessB -. spans .-> S10
+  end
+
+  %% Front-end I/O
+  U[User Turn\nquestion/answer/statement] --> Classifier
+  Script[Script Turn\n(step prompt/assist)] --> Classifier
+
+  %% Classifier & Query Builder
+  Classifier[Lightweight Classifier\nlabels: user_question | user_answer | user_statement | script\n+ step context] --> QB
+  QB[Query Builder\ncurrent turn + step metadata + distilled session/DC summaries] --> Retriever
+
+  %% Hybrid Retrieval
+  subgraph RAG[Hybrid Retrieval]
+    direction TB
+    Retriever[Retriever]
+    KW[keyword]
+    SEM[semantic]
+    META[metadata filter]
+    Retriever --> KW
+    Retriever --> SEM
+    Retriever --> META
+    KW --> Hits[(ranked hits)]
+    SEM --> Hits
+    META --> Hits
+  end
+
+  %% KB & Data Domains
+  subgraph KB[Internal Knowledge Base]
+    direction TB
+    KBDocs[kb_documents]
+    KBChunks[kb_chunks\n+ embeddings + tags]
+  end
+
+  subgraph DATA[User/Data Domain (Supabase/Postgres)]
+    direction TB
+    Decisions[decisions (DC)]
+    DCSteps[dc_steps]
+    SessionsTbl[sessions]
+    SessSum[session_summaries\n(narrative + embedding)]
+    Matrix[matrix_artifacts]
+    Logs[retrieval_logs]
+  end
+
+  Hits --> LLM[LLM Wrapper\n(cite-aware generation)]
+  LLM --> Out[Response / Next Script Action]
+
+  %% Storage flows
+  U -->|raw turn| SessionsTbl
+  Script -->|script events| DCSteps
+  Out -->|artifacts/updates| Matrix
+  Out -->|summaries| SessSum
+
+  %% Retriever sources
+  Retriever --> KBChunks
+  KBChunks --> KBDocs
+
+  %% Context sources to QB
+  SessSum --> QB
+  DCSteps --> QB
+  Decisions --> QB
+
+  %% Separation guard
+  classDef sep fill:#ffe9e9,stroke:#ff6b6b,stroke-width:1px,color:#333
+  class KB sep
+  class DATA sep
+
+  %% Notes
+  note right of Classifier
+    Trigger Policy:
+    - user-originated input OR
+      script-originated hook
+    - simple heuristics to avoid over-fetch
+  end
+
+  note right of RAG
+    Multi-mode retrieval:
+    keyword + semantic + metadata
+  end
+
+
