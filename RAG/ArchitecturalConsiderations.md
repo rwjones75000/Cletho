@@ -146,77 +146,8 @@ Keep that duality in mind as you design, and remember: modularity and separation
 ## Mermaid Diagram  
 
 flowchart TD
-  subgraph DC[Decision Cycle (dc_id)]
-    direction TB
+  DC[Decision Cycle]
+  Step[Decision Cycle Step]
+  Session[Session]
 
-    subgraph Steps[Decision Cycle Steps]
-      direction LR
-      S1[dc01: Introduction]
-      S3[dc03: Framing]
-      S4[dc04: Courses of Action]
-      S6[dc06: Payoffs]
-      S7[dc07: Probabilities]
-      S8[dc08: Utilities / Heuristics]
-      S10[dc10: Interpret Results]
-    end
-
-    subgraph Sessions[Temporal Sessions]
-      direction TB
-      SessA[Session A\n(login→logout)]
-      SessB[Session B\n(login→logout)]
-    end
-
-    S3 -->|script turn| Hook3{{RAG Hook}}
-    S6 -->|script turn| Hook6{{RAG Hook}}
-    S8 -->|script turn| Hook8{{RAG Hook}}
-
-    SessA -. spans .-> S3
-    SessA -. spans .-> S4
-    SessB -. spans .-> S6
-    SessB -. spans .-> S10
-  end
-
-  U[User Turn] --> Classifier
-  Script[Script Turn] --> Classifier
-
-  Classifier --> QB[Query Builder]
-  QB --> Retriever
-
-  subgraph RAG[Hybrid Retrieval]
-    direction TB
-    Retriever --> KW[keyword]
-    Retriever --> SEM[semantic]
-    Retriever --> META[metadata filter]
-    KW --> Hits[(ranked hits)]
-    SEM --> Hits
-    META --> Hits
-  end
-
-  subgraph KB[Internal Knowledge Base]
-    KBDocs[kb_documents]
-    KBChunks[kb_chunks]
-  end
-
-  subgraph DATA[User Data (Supabase)]
-    Decisions[decisions]
-    DCSteps[dc_steps]
-    SessionsTbl[sessions]
-    SessSum[session_summaries]
-    Matrix[matrix_artifacts]
-    Logs[retrieval_logs]
-  end
-
-  Hits --> LLM[LLM Wrapper]
-  LLM --> Out[Response / Next Action]
-
-  U --> SessionsTbl
-  Script --> DCSteps
-  Out --> Matrix
-  Out --> SessSum
-
-  Retriever --> KBChunks
-  KBChunks --> KBDocs
-
-  SessSum --> QB
-  DCSteps --> QB
-  Decisions --> QB
+  DC --> Step --> Session
