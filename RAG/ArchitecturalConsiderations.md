@@ -88,6 +88,8 @@ Instead, the curated corpus will include:
 - **Philosophical references** (e.g., Pascal’s Wager, Buridan’s Ass)  
 - **Templates and heuristics checklists**
 
+**Corpus structure:** Use a **hybrid model**. Author knowledge in Markdown (under version control), ingest into **Supabase** as chunked, embedded entries with metadata for retrieval.  
+
 This corpus is the knowledge base Cletho will rely on. The separation from **user data** (e.g., decision matrices, preferences, logs) is strict and deliberate.
 
 ---
@@ -100,7 +102,11 @@ The RAG system must support **three retrieval modes**:
 2. **Semantic search** (priority emphasis)  
 3. **Metadata filtering** (by step, type, tag, etc.)
 
-The design is hybrid — meaning retrieval queries can combine all three.
+The design is hybrid — meaning retrieval queries can combine all three.     
+
+**Classifier:** Start with a **zero-/few-shot LLM classifier** (JSON-only output). Keep a simple rules fallback available but disabled by default. Fine-tuning is deferred until we have labeled data.    
+
+**Session recall:** For MVP, inject the **entire most-recent session summary**. Evolve to **selective chunk retrieval** (embedding-based, step-tagged) once scaffolding is stable.
 
 ---
 
@@ -133,6 +139,9 @@ For the seven-week build, **minimum viable RAG** means:
 4. Session/DC summaries created and retrievable for future turns.  
 5. Supabase schema enforcing domain separation (user data vs KB).  
 
+
+**Evaluation:** For MVP, log all retrievals and manually review weekly. Define success as: *≥1 relevant chunk in top-3 results for ≥80% of representative queries.* Add **step-success tracking** later when end-to-end flows are exercised.  
+
 ---
 
 ## Closing Note
@@ -142,6 +151,16 @@ The essence of Cletho’s RAG is not just answering questions, but **supporting 
 Keep that duality in mind as you design, and remember: modularity and separation of concerns (user data vs knowledge base, short-term vs long-term memory, retrieval vs reasoning) are what will keep this system robust as it grows.
 
 ---  
+
+## Open Questions (now resolved)
+
+
+
+- 
+
+
+
+---   
 
 ## Mermaid Diagram  
 
