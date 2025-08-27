@@ -145,6 +145,7 @@ The design is hybrid — meaning retrieval queries can combine all three.
   "confidence": 0.86,
   "notes": "User asked for a definition; step=Framing."
 }
+```
 
 ## Data & Storage
 
