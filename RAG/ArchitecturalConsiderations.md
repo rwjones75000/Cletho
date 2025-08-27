@@ -8,7 +8,7 @@ This document captures the principal architectural features of the RAG system fo
 
 Cletho is a decision assistant designed to help users make complex decisions through a structured, multi-step dialogue. That dialog consists primarily of Cletho asking the user questions in order to (1) build out a decision matrix, and (2) identify any cognitive biases that may be affecting the user’s reasoning.
 
-To support this, Cletho requires a ** retrieval-augmented generation (RAG) system**.   
+To support this, Cletho requires a **retrieval-augmented generation (RAG) system**.   
 
 Unlike most RAG systems, which are designed to answer **user-prompted questions**, Cletho’s variant must primarily support **system-initiated prompts** that emerge from scripted steps in a decision-making and cognitive bias identifying framework.
 
