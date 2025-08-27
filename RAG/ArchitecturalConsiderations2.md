@@ -32,6 +32,41 @@ Cletho’s RAG is **dual-triggered**:
 
 This design means the retrieval system is not reactive alone — it is woven into the procedural flow of Cletho’s dialogue.
 
+---   
+
+## Dual Data Flows in Cletho’s MVP RAG
+
+Cletho’s architecture must handle **two distinct but connected data flows**:
+
+1. **User-Originated Flow** — when the user initiates with a question, answer, or statement.  
+2. **System-Originated Flow** — when Cletho initiates with a scripted question, sometimes augmented with retrieval.  
+
+These flows differ in **where the retrieval trigger decision happens**:  
+- In the **user flow**, the **classifier** decides whether to invoke RAG.  
+- In the **system flow**, the **script engine** decides based on RAG hooks embedded in the decision cycle steps.  
+
+Both flows converge after Cletho delivers a prompt and the user responds, ensuring a consistent pipeline.
+
+---
+
+| **User-Originated Flow** | **System-Originated Flow (Cletho-Asks)** |
+|--------------------------|-------------------------------------------|
+| 1. **User Input** → User asks a question, gives an answer, or makes a statement. | 1. **Script Engine** → Advances to the next Decision Cycle Step. May include an explicit RAG hook. |
+| 2. **Classifier** → Labels the turn (`question`, `answer`, `statement`) and decides whether retrieval is needed. | 2. **Trigger Decision** → If the step has a RAG hook, retrieval is triggered automatically. Otherwise, Cletho just asks the scripted question. |
+| 3. **Query Builder** → If retrieval is triggered, constructs a query from current turn + step metadata + session summary. | 3. **Query Builder** → If retrieval is triggered, constructs a query from script prompt + step metadata + session summary. |
+| 4. **Retriever** → Runs hybrid search (keyword, semantic, metadata) in Supabase (KB + session summaries). | 4. **Retriever** → Same hybrid search, but based on the script’s need. |
+| 5. **LLM Wrapper** → Generates a cite-aware response (answer, definition, bias check). | 5. **LLM Wrapper** → Generates a cite-aware augmentation of Cletho’s scripted prompt (definition, example, scaffold). |
+| 6. **Response Delivery** → Cletho replies to user. | 6. **Prompt Delivery** → Cletho poses the question (script + augmented content) to the user. |
+| 7. **Update State** → Logs retrieval, updates session summary, stores artifacts. | 7. **User Responds** → Which kicks the flow back into the *User-Originated* pipeline. |
+
+---
+
+### Key Takeaways
+- Cletho runs on **two alternating flows**: user-driven and system-driven.  
+- **Retrieval triggers** differ: the **classifier** governs user turns; the **script engine** governs Cletho’s own turns.  
+- After Cletho delivers a scripted prompt, the system always transitions back into the **user-originated flow**, keeping the architecture unified.
+
+
 ---
 
 ## Query Construction
