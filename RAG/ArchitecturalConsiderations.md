@@ -108,6 +108,50 @@ The design is hybrid — meaning retrieval queries can combine all three.
 
 **Session recall:** For MVP, inject the **entire most-recent session summary**. Evolve to **selective chunk retrieval** (embedding-based, step-tagged) once scaffolding is stable.
 
+---   
+
+## Zero-/Few-Shot LLM Classifier (MVP Spec)
+
+**Purpose.** Label each turn and decide whether to trigger RAG, with what purpose, and what to use as the query source.
+
+**Labels & Fields**
+- `origin`: `"user" | "script"`
+- `turn_type`: `"question" | "answer" | "statement"`
+- `rag_trigger`: boolean
+- `rag_purpose`: array of enums from  
+  `["definition","example","scaffold","bias_check","clarification","citation"]`
+- `query_focus`: `"current_turn" | "step_prompt" | "session_summary" | "mixed"`
+- `confidence`: 0.0–1.0
+- `notes`: short rationale (≤30 words)
+
+**Trigger Policy (MVP)**
+- `origin="script"` AND step carries a RAG hook ⟶ `rag_trigger=true` with purpose from the hook.  
+- `origin="user"` AND `turn_type="question"` ⟶ `rag_trigger=true`, purpose inferred (`definition|example|clarification|citation`).  
+- `origin="user"` AND `turn_type in {"answer","statement"}` ⟶ trigger only if:  
+  (a) step requires missing info the KB can scaffold,  
+  (b) bias is explicitly mentioned (→ `bias_check`), or  
+  (c) user requests help implicitly (“I don’t understand…”, “hard to compare…”).
+
+**Query Source Rule**
+- Default `query_focus="mixed"`: current turn + step metadata + most-recent session summary.  
+- If `origin="script"` and hook specifies, honor it (e.g., `step_prompt`).  
+- If question asks for a definition/exemplar, bias toward `current_turn`.
+
+**Output Contract (JSON only)**
+The classifier must return **only** this JSON schema:
+
+```json
+{
+  "origin": "user",
+  "turn_type": "question",
+  "rag_trigger": true,
+  "rag_purpose": ["definition"],
+  "query_focus": "current_turn",
+  "confidence": 0.86,
+  "notes": "User asked for a definition; step=Framing."
+}
+
+
 ---
 
 ## Data & Storage
