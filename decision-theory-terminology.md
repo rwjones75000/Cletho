@@ -337,4 +337,4 @@ Both involve unknown outcomes; **risk** has **known/estimable** probabilities, *
 Choosing car insurance (rich actuarial data) is a decision under **risk**. Choosing a business model around a just-released, unproven technology is a decision under **uncertainty**.
 
 ---
-<img width="468" height="628" alt="image" src="https://github.com/user-attachments/assets/09c61eb2-a9f0-4e02-ac3b-2dcb8972f78e" />
+
